@@ -20,12 +20,87 @@
             padding: 0;
             margin: 0;
         }
+
+        /* LOGIN OVERLAY */
+
+        #passwordOverlay{
+            position: fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            backdrop-filter: blur(8px);
+            background: rgba(0,0,0,0.35);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            z-index:9999;
+        }
+
+        /* LOGIN CARD */
+
+        #passwordBox{
+            background:white;
+            padding:35px;
+            border-radius:10px;
+            width:300px;
+            text-align:center;
+            font-family: Arial;
+            box-shadow:0 10px 35px rgba(0,0,0,0.4);
+        }
+
+        /* TITLE */
+
+        #passwordBox h2{
+            margin-top:0;
+            font-size:20px;
+        }
+
+        /* INPUT */
+
+        #passwordInput{
+            width:100%;
+            padding:10px;
+            margin-top:15px;
+            border:1px solid #ccc;
+            border-radius:6px;
+            font-size:14px;
+        }
+
+        /* BUTTON */
+
+        #passwordBox button{
+            margin-top:15px;
+            width:100%;
+            padding:10px;
+            border:none;
+            background:#2c7be5;
+            color:white;
+            font-size:14px;
+            border-radius:6px;
+            cursor:pointer;
+        }
+
+        #passwordBox button:hover{
+            background:#1a5fd0;
+        }
+
         </style>
         <title></title>
     </head>
     <body>
-        <div id="map">
+
+    <div id="passwordOverlay">
+        <div id="passwordBox">
+            <h2>Toll Road Map Access</h2>
+            <input type="password" id="passwordInput" placeholder="Enter password">
+            <button onclick="checkPassword()">Access Map</button>
         </div>
+    </div>
+
+    <div id="mapContainer" style="display:none;">
+        <div id="map"></div>
+    </div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
         <script src="js/L.Control.Layers.Tree.min.js"></script>
@@ -58,6 +133,7 @@
             }
             highlightLayer.openPopup();
         }
+
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
         }).fitBounds([[-9.733530498330799,111.96288166921514],[-7.250270090372299,117.33239719040611]]);
@@ -610,6 +686,32 @@
                 filterFunc();
             };
             div_Status.appendChild(reset_Status);
-        </script>        
+        </script>  
+        <script>
+        function checkPassword(){
+            var password = document.getElementById("passwordInput").value.trim();
+
+            if(password === "111"){
+
+                document.getElementById("passwordOverlay").style.display = "none";
+                document.getElementById("mapContainer").style.display = "block";
+
+                setTimeout(function(){
+
+                    map.invalidateSize();
+
+                    map.setView([
+                        [-9.733530498330799,111.96288166921514],
+                        [-7.250270090372299,117.33239719040611]
+                    ], 2);
+
+                },300);
+
+            }
+            else{
+                alert("Incorrect password");
+            }
+        }
+        </script>   
     </body>
 </html>
